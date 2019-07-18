@@ -1,0 +1,2 @@
+logstash_ip: 192.168.0.8
+logstash_auditbeat_port: 504

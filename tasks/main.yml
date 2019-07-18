@@ -1,0 +1,34 @@
+- name: Add Elasticsearch Apt signing key
+  apt_key:
+    id: 46095ACC8548582C1A2699A9D27D666CD88E42B4
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add Elasticsearch repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    state: present
+
+- name: install auditbeat
+  apt:
+    name: auditbeat
+    update_cache: true
+
+- name: copy auditd rules
+  copy:
+    dest: /etc/auditbeat/audit.rules.d/auditd-attack.conf
+    src: files/auditd-attack.rules
+  notify: restart auditbeat
+
+- name: copy auditbeat configuration.
+  win_template:
+    src: auditbeat.yml.j2
+    dest: "/etc/auditbeat/auditbeat.yml"
+  notify: restart auditbeat
+
+- name: enable and start auditbeat service
+  service:
+    name: auditbeat
+    enabled: true
+    state: started
+    
