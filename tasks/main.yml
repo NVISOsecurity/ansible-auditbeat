@@ -1,3 +1,10 @@
+- name: Install prerequisite packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - gnupg-agent
+
 - name: Add Elasticsearch Apt signing key
   apt_key:
     id: 46095ACC8548582C1A2699A9D27D666CD88E42B4
